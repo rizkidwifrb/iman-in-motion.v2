@@ -1,0 +1,202 @@
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Send, Sparkles } from 'lucide-react';
+import { sendAimanMessage } from '../services/api';
+
+function readParams() {
+  return new URLSearchParams(window.location.hash.split('?')[1] || '');
+}
+
+function cleanReply(text = '') {
+  return String(text)
+    .replace(/\[MOOD:[^\]]*\]/gi, '')
+    .replace(/\[FILM:[^\]]*\]/gi, '')
+    .trim();
+}
+
+function looksArabic(text = '') {
+  return /[\u0600-\u06FF]/.test(text);
+}
+
+function formatContent(text = '') {
+  const cleaned = cleanReply(text);
+  return cleaned.split('\n').filter(Boolean).map((line, index) => {
+    const simple = line.replace(/\*\*/g, '').trim();
+    const isHeading = /^(Dalil yang nyambung|Ayat Arab \/ Hadits Arab|Arti|Penjelasan singkat|Pemahaman dakwah|Langkah kecil|Penguat hadits)$/i.test(simple);
+    const arabic = looksArabic(simple);
+    return (
+      <p
+        key={index}
+        className={`mb-3 last:mb-0 ${isHeading ? 'font-black text-iim-gold tracking-tight' : ''} ${arabic ? 'text-right font-semibold leading-10 md:text-[1.18rem]' : ''}`}
+        dir={arabic ? 'rtl' : 'ltr'}
+      >
+        {simple}
+      </p>
+    );
+  });
+}
+
+export default function Aiman() {
+  const params = useMemo(() => readParams(), []);
+  const mood = params.get('mood') || '';
+  const film = params.get('film') || '';
+  const initial = film ? `Aku mau refleksi tentang film ${film}${mood ? ` untuk mood ${mood}` : ''}.` : '';
+  const [messages, setMessages] = useState([
+    {
+      role: 'assistant',
+      content: 'Assalamualaikum. Aku AIMAN. Ceritain aja pelan-pelan kondisi hati kamu. Kalau kamu minta dalil, aku usahakan kasih ayat atau hadits Arab, artinya, lalu penjelasan dan pemahaman dakwahnya dengan bahasa yang mudah dipahami.'
+    }
+  ]);
+  const [input, setInput] = useState(initial);
+  const [loading, setLoading] = useState(false);
+  const boxRef = useRef(null);
+  const endRef = useRef(null);
+  const textareaRef = useRef(null);
+
+  function scrollToLatest(behavior = 'smooth') {
+    requestAnimationFrame(() => {
+      if (boxRef.current) {
+        boxRef.current.scrollTo({ top: boxRef.current.scrollHeight + 9999, behavior });
+      }
+      endRef.current?.scrollIntoView({ behavior, block: 'end' });
+    });
+  }
+
+  useEffect(() => {
+    scrollToLatest('smooth');
+    const timer = setTimeout(() => scrollToLatest('auto'), 120);
+    return () => clearTimeout(timer);
+  }, [messages, loading]);
+
+  useEffect(() => {
+    textareaRef.current?.focus();
+  }, []);
+
+  async function handleSend(e) {
+    e?.preventDefault?.();
+    const text = input.trim();
+    if (!text || loading) return;
+    const next = [...messages, { role: 'user', content: text }];
+    setMessages(next);
+    setInput('');
+    setLoading(true);
+    scrollToLatest('auto');
+    try {
+      const data = await sendAimanMessage(text, next.slice(-8));
+      const reply = data.reply || data.answer || data.text || 'Aku dengerin. Coba ceritain sedikit lagi biar aku bisa nangkep konteksnya.';
+      setMessages((current) => [...current, { role: 'assistant', content: cleanReply(reply), films: data.films || [], mood: data.mood }]);
+    } catch (error) {
+      setMessages((current) => [...current, { role: 'assistant', content: error.message || 'AIMAN belum bisa terhubung. Pastikan backend sudah jalan dengan npm start dan GROQ_API_KEY sudah ada di .env.' }]);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function handleKeyDown(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend(e);
+    }
+  }
+
+  const quickPrompts = [
+    'Aku lagi gelisah dan overthinking.',
+    'Aku lagi sedih, butuh film yang nenangin.',
+    'Aku pengen berubah tapi bingung mulai dari mana.',
+    'Kasih aku dalil tentang hati yang gelisah lengkap arab dan artinya.'
+  ];
+
+  return (
+    <section className="aiman-page">
+      <div className="aiman-shell">
+        <aside className="aiman-side">
+          <a href="#/" className="flex items-center gap-3">
+            <img src="/logo.png" alt="IMAN IN MOTION" className="h-11 w-11 rounded-2xl bg-iim-cream object-contain p-1" />
+            <div>
+              <p className="text-sm font-black tracking-[0.18em] text-white">AIMAN</p>
+              <p className="text-xs font-semibold text-white/55">Teman refleksi</p>
+            </div>
+          </a>
+
+          <div className="mt-7 rounded-3xl border border-white/10 bg-white/[0.06] p-5">
+            <p className="text-xs font-black uppercase tracking-[0.24em] text-iim-gold">Mulai ngobrol</p>
+            <div className="mt-4 grid gap-2">
+              {quickPrompts.map((prompt) => (
+                <button
+                  key={prompt}
+                  type="button"
+                  onClick={() => setInput(prompt)}
+                  className="rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 text-left text-sm font-semibold leading-6 text-white/80 transition hover:border-iim-gold hover:text-iim-gold"
+                >
+                  {prompt}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-4 rounded-3xl border border-iim-gold/20 bg-iim-gold/10 p-5 text-sm leading-7 text-white/70">
+            <p className="font-extrabold text-iim-gold">Catatan aman</p>
+            <p className="mt-2">Kalau kondisi terasa sangat berat atau tidak aman, hubungi orang terdekat atau bantuan profesional. AIMAN menemani refleksi, bukan menggantikan ahli.</p>
+          </div>
+        </aside>
+
+        <main className="aiman-chat-panel">
+          <header className="aiman-chat-header">
+            <div className="flex min-w-0 items-center gap-3">
+              <img src="/logo.png" alt="AIMAN" className="h-10 w-10 rounded-2xl bg-iim-cream object-contain p-1" />
+              <div className="min-w-0">
+                <p className="text-xs font-black uppercase tracking-[0.26em] text-iim-gold">AIMAN Chat</p>
+                <h1 className="mt-1 truncate text-2xl font-black text-white md:text-3xl">Ruang ngobrol yang tenang.</h1>
+              </div>
+            </div>
+            <div className="hidden rounded-full border border-white/10 bg-white/[0.06] px-4 py-2 text-xs font-bold text-white/65 sm:block">
+              {mood ? `Mood: ${mood}` : 'Online'}
+            </div>
+          </header>
+
+          <div ref={boxRef} className="aiman-messages">
+            {messages.map((message, index) => (
+              <div key={index} className={`aiman-row ${message.role === 'user' ? 'user' : 'assistant'}`}>
+                {message.role === 'assistant' && (
+                  <div className="aiman-avatar"><Sparkles size={18} /></div>
+                )}
+                <div className="aiman-bubble">
+                  <div className="text-sm leading-7 md:text-[15px]">{formatContent(message.content)}</div>
+                  {message.films?.length ? (
+                    <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                      {message.films.slice(0, 2).map((filmItem) => (
+                        <a key={filmItem.title} href={`#/film?mood=${message.mood || ''}`} className="rounded-2xl border border-iim-gold/20 bg-iim-gold/10 p-3 text-xs font-bold text-iim-cream transition hover:border-iim-gold">
+                          🎬 {filmItem.title} {filmItem.year ? `(${filmItem.year})` : ''}
+                        </a>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+              </div>
+            ))}
+            {loading && (
+              <div className="aiman-row assistant">
+                <div className="aiman-avatar"><Sparkles size={18} /></div>
+                <div className="aiman-bubble typing"><span /> <span /> <span /></div>
+              </div>
+            )}
+            <div ref={endRef} className="h-1" aria-hidden="true" />
+          </div>
+
+          <form onSubmit={handleSend} className="aiman-input-wrap">
+            <textarea
+              ref={textareaRef}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Tulis perasaan kamu di sini..."
+              rows={1}
+            />
+            <button type="submit" disabled={loading || !input.trim()} aria-label="Kirim pesan">
+              <Send size={18} />
+            </button>
+          </form>
+        </main>
+      </div>
+    </section>
+  );
+}

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Info — IMAN IN MOTION</title>
+
+<link href="logo.png" rel="icon"/>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --brand:#04575B;
+  --brand-2:#0A7D78;
+  --bg:#030505;
+  --text:#E7F6F2;
+  --muted:#8a9a95;
+  --border:#1a2e2b;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  background:#030505;
+  color:var(--text);
+
+  background-image:
+  linear-gradient(rgba(4,87,91,.07) 1px, transparent 1px),
+  linear-gradient(90deg, rgba(4,87,91,.07) 1px, transparent 1px);
+  background-size:50px 50px;
+}
+
+/* HEADER */
+.header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:28px 22px;
+  border-bottom:1px solid var(--border);
+}
+
+.logo-wrap{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:800;
+}
+
+.logo-wrap img{
+  width:40px;
+}
+
+.page-title{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  font-weight:700;
+}
+
+/* ===== MAIN LAYOUT ===== */
+.main-wrap{
+  display:flex;
+  align-items:flex-start; /* 🔥 penting: sejajar atas */
+  justify-content:space-between;
+  gap:40px;
+  padding:100px 6%;
+}
+
+/* LEFT TEXT */
+.about{
+  max-width:420px;
+}
+
+.about span{
+  color:var(--brand-2);
+  font-size:13px;
+  letter-spacing:2px;
+  font-weight:700;
+}
+
+.about h1{
+  font-size:64px;
+  margin:14px 0;
+  font-weight:800;
+}
+
+.about p{
+  color:#b0beb9;
+  line-height:1.7;
+}
+
+/* LOGO */
+.center-logo{
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  flex:1;
+}
+
+.center-logo img{
+  width:260px;
+  margin-top:10px;
+  filter:drop-shadow(0 0 40px rgba(4,87,91,0.4));
+}
+
+/* RIGHT BOX */
+.features{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:20px;
+  max-width:520px;
+}
+
+.feature{
+  background:rgba(255,255,255,.03);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:20px;
+}
+
+.feature h3{
+  margin:0 0 8px;
+  font-size:15px;
+}
+
+.feature p{
+  font-size:13px;
+  color:#a3b3ae;
+}
+
+/* TEAM (PALING BAWAH) */
+.team{
+  margin-top:80px;
+  text-align:center;
+}
+
+.team h2{
+  font-size:28px;
+}
+
+.team-grid{
+  display:flex;
+  justify-content:center;
+  gap:40px;
+  margin-top:30px;
+  padding-bottom:200px;
+}
+
+.member img{
+  width:120px;
+  height:120px;
+  border-radius:20px;
+  object-fit:cover;
+  border:1px solid var(--border);
+}
+.back-btn{
+  color:#cfe7e3;
+  text-decoration:none;
+  font-weight:600;
+  font-size:14px;
+  transition:0.2s;
+}
+
+.back-btn:hover{
+  color:#fff;
+}
+.team-sub{
+  color:#8a9a95;
+  margin-top:6px;
+  margin-bottom:30px;
+}
+
+.member .name{
+  margin-top:10px;
+  font-weight:600;
+}
+
+.member .role{
+  font-size:13px;
+  color:#0A7D78;
+  margin-top:4px;
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+
+  .main-wrap{
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+  }
+
+  .center-logo img{
+    width:200px;
+    margin:20px 0;
+  }
+
+  .features{
+    grid-template-columns:1fr;
+    max-width:100%;
+  }
+
+  .about{
+    max-width:100%;
+  }
+
+  .about h1{
+    font-size:42px;
+  }
+
+  .team-grid{
+    flex-direction:column;
+    gap:30px;
+  }
+
+  .member img{
+    width:100px;
+    height:100px;
+  }
+}
+
+
+/* === UNIFIED HEADER PATCH: sinkron untuk Film, Artikel, Info === */
+.iim-unified-header,
+.header.iim-unified-header{
+  position:sticky;
+  top:0;
+  z-index:999;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:22px;
+  min-height:70px;
+  padding:15px clamp(18px,5vw,72px) !important;
+  background:rgba(3,5,5,.82) !important;
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(255,255,255,.09) !important;
+  box-shadow:none !important;
+}
+.iim-unified-header .logo-wrap{
+  display:flex !important;
+  align-items:center !important;
+  gap:10px !important;
+  font-size:15px !important;
+  font-weight:900 !important;
+  letter-spacing:.045em !important;
+  color:#f5f7f2 !important;
+  text-decoration:none !important;
+  white-space:nowrap;
+}
+.iim-unified-header .logo{
+  width:38px !important;
+  height:38px !important;
+  object-fit:contain !important;
+  display:block !important;
+}
+.iim-unified-header .logo-wrap b{color:#FFC090 !important;}
+.iim-unified-header .nav{
+  display:flex !important;
+  align-items:center !important;
+  gap:26px !important;
+  color:#aab8b2 !important;
+  font-size:14px !important;
+  font-weight:850 !important;
+  letter-spacing:.03em !important;
+}
+.iim-unified-header .nav a{
+  color:#aab8b2 !important;
+  text-decoration:none !important;
+  transition:.22s ease;
+}
+.iim-unified-header .nav a:hover,
+.iim-unified-header .nav a.active{
+  color:#FFC090 !important;
+}
+.iim-unified-header .menu-toggle{
+  display:none;
+  width:42px;
+  height:42px;
+  border:1px solid rgba(255,255,255,.12) !important;
+  border-radius:14px;
+  background:rgba(255,255,255,.06) !important;
+  color:#f5f7f2 !important;
+  cursor:pointer;
+  font-weight:900;
+}
+@media(max-width:760px){
+  .iim-unified-header,
+  .header.iim-unified-header{padding:12px 16px !important;min-height:66px;}
+  .iim-unified-header .menu-toggle{display:grid !important;place-items:center;order:-1;}
+  .iim-unified-header .logo-wrap{gap:8px;font-size:13px !important;}
+  .iim-unified-header .logo{width:34px !important;height:34px !important;}
+  .iim-unified-header .nav{
+    position:fixed !important;
+    top:72px !important;
+    left:14px !important;
+    right:14px !important;
+    display:none !important;
+    flex-direction:column !important;
+    align-items:stretch !important;
+    gap:0 !important;
+    padding:12px !important;
+    border:1px solid rgba(255,255,255,.12) !important;
+    border-radius:22px !important;
+    background:#071110 !important;
+    box-shadow:0 24px 80px rgba(0,0,0,.48);
+  }
+  .iim-unified-header .nav.open{display:flex !important;}
+  .iim-unified-header .nav a{padding:14px 14px;border-radius:14px;}
+  .iim-unified-header .nav a:hover,
+  .iim-unified-header .nav a.active{background:rgba(208,112,48,.14);}
+}
+
+</style>
+  <link rel="stylesheet" href="ux-js-activation.css" />
+  <link rel="stylesheet" href="iim-mobile-fix.css" />
+  <link rel="stylesheet" href="iim-mobile-clean.css" />
+  <link rel="stylesheet" href="iim-mobile-final.css" />
+  <link rel="stylesheet" href="iim-nav-sync.css" />
+</head>
+
+<body data-page="info">
+
+<header class="header iim-unified-header">
+  <a class="logo-wrap" href="index.html"><img class="logo" src="logo.png" alt="IMAN IN MOTION"><span>IMAN IN <b>MOTION</b></span></a>
+  <button id="menuToggle" class="menu-toggle" aria-label="Buka menu" aria-expanded="false">☰</button>
+  <nav class="nav" id="mainNav" aria-label="Navigasi utama">
+    <a href="index.html">Home</a>
+    <a href="film.html">Film</a>
+    <a href="artikel.html">Artikel</a>
+    <a class="active" href="info.html">Info</a>
+    <a href="aiman.html">AIMAN</a>
+  </nav>
+</header>
+
+<!-- MAIN -->
+<section class="main-wrap">
+
+  <!-- LEFT -->
+  <div class="about">
+    <span>TENTANG KAMI</span>
+    <h1>IMAN IN MOTION</h1>
+    <p>
+      IMAN IN MOTION adalah platform yang menggabungkan teknologi
+      dan dakwah dengan pendekatan yang lebih manusiawi.
+      Kami percaya komunikasi bukan hanya menjawab,
+      tapi memahami perasaan.
+    </p>
+  </div>
+
+  <!-- LOGO -->
+  <div class="center-logo">
+    <img src="logo.png">
+  </div>
+
+  <!-- RIGHT BOX -->
+  <div class="features">
+
+    <div class="feature">
+      <h3>Komunikasi Interpersonal</h3>
+      <p>Mendengar dulu sebelum menjawab.</p>
+    </div>
+
+    <div class="feature">
+      <h3>Komunikasi Dakwah</h3>
+      <p>Dakwah lembut tanpa paksaan.</p>
+    </div>
+
+    <div class="feature">
+      <h3>Komunikasi Digital</h3>
+      <p>Ruang aman tanpa eksploitasi emosi.</p>
+    </div>
+
+    <div class="feature">
+      <h3>No pressure</h3>
+      <p>Rekomendasi tanpa paksaan.</p>
+    </div>
+
+    <div class="feature">
+      <h3>Personal</h3>
+      <p>Disesuaikan dengan perasaanmu.</p>
+    </div>
+
+    <div class="feature">
+      <h3>Why Use</h3>
+      <p>Film bisa jadi jalan hidayah.</p>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- TEAM -->
+<section class="team">
+  <h2>Our Team</h2>
+  <p class="team-sub">UIKA-Berani Project</p>
+
+  <div class="team-grid">
+
+    <div class="member">
+      <img src="dwi.jpg">
+      <div class="name">Rizki Dwi Febriansyah</div>
+      <div class="role">Fullstack Developer</div>
+    </div>
+
+    <div class="member">
+      <img src="fidri.jpg">
+      <div class="name">Muhammad Fidri Takhrimsyah</div>
+      <div class="role">Data Engineer</div>
+    </div>
+    <div class="member">
+      <img src="faris.jpg">
+      <div class="name">Faris All Farizki</div>
+      <div class="role">Database Administrator</div>
+    </div>
+  </div>
+</section>
+
+  <script type="module" src="js/iim-page-upgrade.js"></script>
+  <script src="js/iim-mobile-nav.js"></script>
+</body>
+</html>
