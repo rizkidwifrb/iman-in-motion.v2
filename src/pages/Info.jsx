@@ -1,12 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
-import { ChevronDown, Copy, ExternalLink, Instagram, X } from 'lucide-react';
+import { ChevronDown, Copy, ExternalLink, Instagram } from 'lucide-react';
 import SectionTitle from '../components/SectionTitle';
 
-const sharedBio = [
-  ['Prodi', 'Komunikasi dan Penyiaran Islam'],
-  ['Fakultas', 'Fakultas Agama Islam'],
-  ['Kampus', 'Universitas Ibn Khaldun Bogor']
-];
+const educationLine = 'KPI • Fakultas Agama Islam • UIKA Bogor';
 
 const team = [
   {
@@ -18,6 +14,7 @@ const team = [
     instagram: '@uwiberani',
     instagramUrl: 'https://www.instagram.com/uwiberani/',
     summary: 'Mengembangkan alur aplikasi, antarmuka, backend, AIMAN, dan integrasi fitur utama.',
+    compactTask: 'Frontend, backend, login, AIMAN, dan integrasi rekomendasi.',
     jobdesk: 'Bertanggung jawab pada pengembangan aplikasi secara menyeluruh, mulai dari tampilan antarmuka, navigasi halaman, integrasi login, sistem rekomendasi, sampai koneksi AIMAN dengan layanan AI. Peran ini memastikan pengalaman pengguna tetap nyaman di desktop maupun mobile, serta menjaga agar fitur mood, film, artikel, dan chat dapat berjalan sebagai satu kesatuan aplikasi.'
   },
   {
@@ -25,10 +22,11 @@ const team = [
     shortName: 'Fidri',
     role: 'Data Engineer',
     image: '/fidri.jpg',
-    imagePosition: 'center 6%',
+    imagePosition: 'center 2%',
     instagram: '@mfyyd.ry',
     instagramUrl: 'https://www.instagram.com/mfyyd.ry/',
     summary: 'Mengolah sumber data film, scraping pelengkap, filtering, dan pemetaan mood.',
+    compactTask: 'MovieLens, scraping, filtering, dan mood mapping.',
     jobdesk: 'Bertanggung jawab pada pengolahan data film. Data awal diambil dari MovieLens, kemudian dilengkapi melalui proses scraping untuk memperoleh informasi tambahan seperti poster, sinopsis, genre, tahun, dan rating. Setelah itu, data dibersihkan, disaring, dan dipetakan ke enam kategori mood agar bisa digunakan oleh sistem rekomendasi IMAN IN MOTION.'
   },
   {
@@ -36,10 +34,11 @@ const team = [
     shortName: 'Faris',
     role: 'Database Administrator',
     image: '/faris.jpg',
-    imagePosition: 'center 8%',
+    imagePosition: 'center 0%',
     instagram: '@faris.alrzz',
     instagramUrl: 'https://www.instagram.com/faris.alrzz/',
     summary: 'Menata struktur data film, artikel, genre, rating, poster, dan tag mood.',
+    compactTask: 'Struktur data film, artikel, genre, poster, rating, dan tag mood.',
     jobdesk: 'Bertanggung jawab pada perapihan dan pengelolaan struktur data agar mudah dipanggil oleh aplikasi. Peran ini meliputi penataan metadata film, konsistensi genre, rating, poster, mood, dan artikel, sehingga data yang telah diolah dapat ditampilkan dengan stabil pada halaman film, mood, artikel, dan detail rekomendasi.'
   }
 ];
@@ -68,7 +67,6 @@ function copyText(text, setCopied) {
 
 export default function Info() {
   const [activeTab, setActiveTab] = useState(getTab());
-  const [activeMember, setActiveMember] = useState(null);
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -77,12 +75,6 @@ export default function Info() {
     return () => window.removeEventListener('hashchange', sync);
   }, []);
 
-  useEffect(() => {
-    document.body.style.overflow = activeMember ? 'hidden' : '';
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [activeMember]);
 
   const title = useMemo(() => {
     return tabs.find(([key]) => key === activeTab)?.[1] || 'Tentang IMAN IN MOTION';
@@ -184,8 +176,8 @@ export default function Info() {
           <SectionTitle centered eyebrow="Our Team" title="UIKA-Berani Project" description="Tim pengembang IMAN IN MOTION dari Program Studi Komunikasi dan Penyiaran Islam, Fakultas Agama Islam, Universitas Ibn Khaldun Bogor." />
           <div className="grid items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {team.map((member) => (
-              <article key={member.name} className="team-card premium-card relative flex h-full cursor-pointer flex-col p-5" role="button" tabIndex={0} onClick={() => setActiveMember(member)} onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setActiveMember(member)}>
-                <div className="flex items-center gap-4">
+              <article key={member.name} className="team-card premium-card flex h-full flex-col p-5">
+                <div className="flex items-start gap-4">
                   <div className="grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-2xl bg-iim-gold/20">
                     <img
                       src={member.image}
@@ -195,14 +187,25 @@ export default function Info() {
                       onError={(e) => { e.currentTarget.style.display = 'none'; }}
                     />
                   </div>
-                  <div className="min-w-0">
+                  <div className="min-w-0 flex-1">
                     <h3 className="text-2xl font-black leading-tight text-iim-coffee dark:text-iim-cream">{member.shortName}</h3>
                     <p className="mt-1 text-sm font-extrabold text-iim-brown dark:text-iim-gold">{member.role}</p>
                     <p className="mt-1 inline-flex items-center gap-1 text-xs font-bold text-iim-brown/75 dark:text-iim-sand"><Instagram size={13} /> {member.instagram}</p>
                   </div>
                 </div>
-                <p className="mt-4 line-clamp-3 min-h-[5.25rem] text-sm leading-7 text-iim-brown dark:text-iim-sand">{member.summary}</p>
-                <button type="button" onClick={(e) => { e.stopPropagation(); setActiveMember(member); }} className="relative z-10 mt-auto inline-flex w-fit rounded-2xl bg-iim-gold px-4 py-2 text-sm font-black text-iim-charcoal transition hover:-translate-y-0.5">Lihat detail</button>
+
+                <div className="mt-4 space-y-3">
+                  <p className="rounded-2xl bg-white/55 px-3 py-2 text-xs font-bold leading-5 text-iim-brown dark:bg-white/10 dark:text-iim-sand">{educationLine}</p>
+                  <div className="rounded-2xl border border-iim-gold/20 bg-iim-gold/10 px-3 py-3">
+                    <p className="text-[10px] font-black uppercase tracking-[0.18em] text-iim-brown dark:text-iim-gold">Tugas</p>
+                    <p className="mt-1 text-sm font-semibold leading-6 text-iim-brown dark:text-iim-sand">{member.compactTask}</p>
+                  </div>
+                  <p className="text-sm leading-7 text-iim-brown dark:text-iim-sand">{member.summary}</p>
+                </div>
+
+                <a href={member.instagramUrl} target="_blank" rel="noreferrer" className="mt-auto inline-flex w-fit items-center gap-2 rounded-2xl bg-iim-gold px-4 py-2 text-sm font-black text-iim-charcoal transition hover:-translate-y-0.5">
+                  <ExternalLink size={15} /> Kunjungi Instagram
+                </a>
               </article>
             ))}
           </div>
@@ -247,45 +250,6 @@ export default function Info() {
               <button type="button" onClick={() => copyText('+62 896 8221 8382', setCopied)} className="mt-5 inline-flex items-center gap-2 rounded-2xl bg-iim-coffee px-4 py-3 text-sm font-black text-iim-cream transition hover:-translate-y-0.5 dark:bg-iim-gold dark:text-iim-charcoal">
                 <Copy size={16} /> {copied ? 'Nomor tersalin' : 'Salin nomor'}
               </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {activeMember && (
-        <div className="team-modal-overlay fixed inset-0 z-[200] grid place-items-center bg-black/85 p-4 backdrop-blur-md" onClick={(e) => { if (e.target === e.currentTarget) setActiveMember(null); }}>
-          <div className="team-modal-sheet max-h-[88vh] w-full max-w-2xl overflow-y-auto rounded-[2rem] border border-white/10 bg-iim-cream p-5 shadow-premium dark:bg-[#18130f]" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-start justify-between gap-4">
-              <div className="flex min-w-0 items-center gap-4">
-                <div className="h-20 w-20 shrink-0 overflow-hidden rounded-3xl bg-iim-gold/20">
-                  <img
-                    src={activeMember.image}
-                    alt={activeMember.name}
-                    className="h-full w-full object-cover"
-                    style={{ objectPosition: activeMember.imagePosition || 'center 22%' }}
-                    onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                  />
-                </div>
-                <div className="min-w-0">
-                  <p className="section-eyebrow">Detail Tim</p>
-                  <h3 className="mt-2 text-2xl font-black text-iim-coffee dark:text-iim-cream">{activeMember.name}</h3>
-                  <p className="mt-1 font-extrabold text-iim-brown dark:text-iim-gold">{activeMember.role}</p>
-                  <p className="mt-2 inline-flex items-center gap-1 text-sm font-bold text-iim-brown dark:text-iim-sand"><Instagram size={14} /> {activeMember.instagram}</p>
-                </div>
-              </div>
-              <button className="rounded-2xl border border-iim-brown/15 p-3 dark:border-white/10" onClick={() => setActiveMember(null)} aria-label="Tutup detail"><X size={18} /></button>
-            </div>
-
-            <div className="mt-5 grid gap-3 rounded-3xl bg-white/60 p-4 text-sm leading-7 dark:bg-white/10 sm:grid-cols-2">
-              <p><b>Nama:</b> {activeMember.name}</p>
-              {sharedBio.map(([label, value]) => <p key={label}><b>{label}:</b> {value}</p>)}
-            </div>
-            <div className="mt-4 rounded-3xl border border-iim-gold/20 bg-iim-gold/10 p-5">
-              <p className="text-xs font-extrabold uppercase tracking-widest text-iim-brown dark:text-iim-gold">Penjelasan tugas</p>
-              <p className="mt-3 leading-8 text-iim-brown dark:text-iim-sand">{activeMember.jobdesk}</p>
-              <a href={activeMember.instagramUrl} target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center gap-2 rounded-2xl bg-iim-gold px-4 py-3 text-sm font-black text-iim-charcoal transition hover:-translate-y-0.5">
-                <ExternalLink size={16} /> Kunjungi Instagram
-              </a>
             </div>
           </div>
         </div>
