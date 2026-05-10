@@ -10,6 +10,7 @@ import Articles from './pages/Articles';
 import ArticleDetail from './pages/ArticleDetail';
 import Aiman from './pages/Aiman';
 import Info from './pages/Info';
+import { movies as splashMovies } from './data/movies';
 
 
 const firebaseConfig = {
@@ -394,9 +395,84 @@ function Navbar({ path, theme, setTheme }) {
   );
 }
 
+function SplashScreen({ onDone }) {
+  const [leaving, setLeaving] = useState(false);
+  const finishRef = React.useRef(false);
+  const splashPosters = useMemo(() => splashMovies.filter((movie) => movie.poster_url).slice(0, 30), []);
+
+  function finish() {
+    if (finishRef.current) return;
+    finishRef.current = true;
+    setLeaving(true);
+    window.setTimeout(() => {
+      sessionStorage.setItem('iim_splash_seen', 'yes');
+      onDone?.();
+    }, 520);
+  }
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => finish(), 4600);
+    const keyHandler = (event) => {
+      if (event.key === 'Enter' || event.key === ' ' || event.key === 'Escape') finish();
+    };
+    window.addEventListener('keydown', keyHandler);
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener('keydown', keyHandler);
+    };
+  }, []);
+
+  return (
+    <button
+      type="button"
+      className={`splash-screen ${leaving ? 'leaving' : ''}`}
+      onClick={finish}
+      aria-label="Klik di mana saja untuk melanjutkan ke IMAN IN MOTION"
+    >
+      <span className="splash-3d-stage" aria-hidden="true">
+        {[0, 1, 2].map((row) => (
+          <span key={row} className={`splash-poster-row row-${row + 1}`}>
+            {[...splashPosters, ...splashPosters.slice(0, 12)].map((movie, index) => (
+              <span className="splash-poster-tile" key={`${row}-${movie.title_asli}-${index}`}>
+                <img src={movie.poster_url} alt="" loading="eager" />
+              </span>
+            ))}
+          </span>
+        ))}
+      </span>
+      <span className="splash-orb splash-orb-one" />
+      <span className="splash-orb splash-orb-two" />
+      <span className="splash-orb splash-orb-three" />
+      <span className="splash-film-line line-a" />
+      <span className="splash-film-line line-b" />
+      <span className="splash-film-line line-c" />
+      <span className="splash-mood-dot dot-a" />
+      <span className="splash-mood-dot dot-b" />
+      <span className="splash-mood-dot dot-c" />
+      <span className="splash-spark spark-a">✦</span>
+      <span className="splash-spark spark-b">✧</span>
+      <span className="splash-spark spark-c">•</span>
+
+      <span className="splash-center">
+        <span className="splash-logo-wrap">
+          <img src="/logo.png" alt="IMAN IN MOTION" className="splash-logo" />
+          <span className="splash-logo-shadow" />
+        </span>
+        <span className="splash-copy">
+          <span className="splash-eyebrow">Mood • Film • Refleksi</span>
+          <span className="splash-title">IMAN IN MOTION</span>
+          <span className="splash-subtitle">Temukan tontonan yang menyentuh hati dan menguatkan iman.</span>
+        </span>
+        <span className="splash-continue">Klik di mana saja untuk melanjutkan</span>
+      </span>
+    </button>
+  );
+}
+
 function App() {
   const [path, setPath] = useState(getPath());
   const [theme, setThemeState] = useState(() => localStorage.getItem('iim-theme') || 'dark');
+  const [showSplash, setShowSplash] = useState(() => sessionStorage.getItem('iim_splash_seen') !== 'yes');
 
   useEffect(() => {
     const handler = () => setPath(getPath());
@@ -423,7 +499,9 @@ function App() {
   const isAimanRoute = path === '/aiman';
 
   return (
-    <div className={`min-h-screen text-iim-coffee dark:text-iim-cream ${isAimanRoute ? 'is-aiman-route' : ''}`}>
+    <>
+      {showSplash && <SplashScreen onDone={() => setShowSplash(false)} />}
+      <div className={`min-h-screen text-iim-coffee dark:text-iim-cream ${isAimanRoute ? 'is-aiman-route' : ''}`}>
       <Navbar path={path} theme={theme} setTheme={setThemeState} />
       <main className="fade-in">
         <Page path={path} />
@@ -434,7 +512,8 @@ function App() {
           <p>Because we move with iman, story, and reflection.</p>
         </div>
       </footer>}
-    </div>
+      </div>
+    </>
   );
 }
 
