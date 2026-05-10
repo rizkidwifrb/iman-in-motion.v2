@@ -1971,3 +1971,171 @@ img[alt="Logo"], img[alt="IMAN IN MOTION"] {
     display: none !important;
   }
 }
+
+/* v27: AIMAN mobile full-chat verified layout */
+@media (max-width: 767px) {
+  .is-aiman-route {
+    height: 100dvh;
+    overflow: hidden;
+    background: #0b0a08;
+  }
+
+  .is-aiman-route main.fade-in {
+    height: calc(100dvh - 72px);
+    overflow: hidden;
+    animation: none;
+  }
+
+  .is-aiman-route .aiman-page {
+    height: calc(100dvh - 72px);
+    min-height: calc(100dvh - 72px);
+    margin-bottom: 0 !important;
+    overflow: hidden;
+  }
+
+  .is-aiman-route .aiman-shell,
+  .is-aiman-route .aiman-chat-panel {
+    height: 100%;
+    min-height: 0 !important;
+    overflow: hidden;
+  }
+
+  .is-aiman-route .aiman-side {
+    display: none !important;
+  }
+
+  .is-aiman-route .aiman-chat-header {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    min-height: 78px;
+    padding: 13px 13px 12px;
+    background: rgba(11,10,8,.96);
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    backdrop-filter: blur(18px);
+  }
+
+  .is-aiman-route .aiman-chat-header img {
+    width: 38px;
+    height: 38px;
+    border-radius: 14px;
+  }
+
+  .is-aiman-route .aiman-chat-header p {
+    font-size: .68rem;
+    letter-spacing: .22em;
+  }
+
+  .is-aiman-route .aiman-chat-header h1 {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    font-size: 1.28rem;
+    line-height: 1.1;
+    margin-top: 3px;
+  }
+
+  .is-aiman-route .aiman-messages {
+    flex: 1 1 auto;
+    height: auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    padding: 16px 12px 178px !important;
+    scroll-padding-bottom: 178px;
+  }
+
+  .is-aiman-route .aiman-row {
+    gap: 9px;
+    margin-bottom: 16px;
+  }
+
+  .is-aiman-route .aiman-avatar {
+    width: 32px;
+    height: 32px;
+    flex: 0 0 32px;
+    border-radius: 13px;
+  }
+
+  .is-aiman-route .aiman-bubble {
+    max-width: calc(100% - 44px);
+    border-radius: 22px;
+    padding: 14px 15px;
+    font-size: .92rem;
+    line-height: 1.75;
+  }
+
+  .is-aiman-route .aiman-row.user .aiman-bubble {
+    max-width: 82%;
+  }
+
+  .is-aiman-route .aiman-input-wrap {
+    position: fixed !important;
+    left: 12px !important;
+    right: 12px !important;
+    bottom: calc(88px + env(safe-area-inset-bottom)) !important;
+    z-index: 95 !important;
+    display: grid;
+    grid-template-columns: 1fr 48px;
+    gap: 9px;
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 24px;
+    background: rgba(15,13,10,.96);
+    box-shadow: 0 18px 70px rgba(0,0,0,.45);
+    padding: 9px !important;
+    backdrop-filter: blur(18px);
+  }
+
+  .is-aiman-route .aiman-input-wrap textarea {
+    min-height: 48px;
+    max-height: 112px;
+    border-radius: 18px;
+    padding: 12px 13px;
+    font-size: .92rem;
+    line-height: 1.55;
+  }
+
+  .is-aiman-route .aiman-input-wrap button {
+    width: 48px;
+    height: 48px;
+    border-radius: 18px;
+  }
+
+  .is-aiman-route .mobile-bottom-nav {
+    z-index: 90;
+  }
+}
+
+@media (max-width: 390px) {
+  .is-aiman-route .aiman-chat-header {
+    min-height: 74px;
+    padding: 11px 10px;
+  }
+
+  .is-aiman-route .aiman-chat-header h1 {
+    font-size: 1.16rem;
+  }
+
+  .is-aiman-route .aiman-messages {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    padding-bottom: 166px !important;
+  }
+
+  .is-aiman-route .aiman-input-wrap {
+    left: 9px !important;
+    right: 9px !important;
+    bottom: calc(82px + env(safe-area-inset-bottom)) !important;
+    grid-template-columns: 1fr 46px;
+  }
+
+  .is-aiman-route .aiman-input-wrap textarea {
+    min-height: 46px;
+  }
+
+  .is-aiman-route .aiman-input-wrap button {
+    width: 46px;
+    height: 46px;
+  }
+}

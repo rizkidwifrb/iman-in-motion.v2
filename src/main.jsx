@@ -420,18 +420,20 @@ function App() {
     return routes[path] || Home;
   }, [path]);
 
+  const isAimanRoute = path === '/aiman';
+
   return (
-    <div className="min-h-screen text-iim-coffee dark:text-iim-cream">
+    <div className={`min-h-screen text-iim-coffee dark:text-iim-cream ${isAimanRoute ? 'is-aiman-route' : ''}`}>
       <Navbar path={path} theme={theme} setTheme={setThemeState} />
       <main className="fade-in">
         <Page path={path} />
       </main>
-      <footer className="mt-16 border-t border-iim-brown/10 py-8 dark:border-white/10">
+      {!isAimanRoute && <footer className="mt-16 border-t border-iim-brown/10 py-8 dark:border-white/10">
         <div className="container-page flex flex-col gap-3 text-sm text-iim-brown dark:text-iim-sand md:flex-row md:items-center md:justify-between">
           <p className="font-semibold">© {new Date().getFullYear()} IMAN IN MOTION. Model literasi dakwah berbasis mood.</p>
           <p>Because we move with iman, story, and reflection.</p>
         </div>
-      </footer>
+      </footer>}
     </div>
   );
 }
