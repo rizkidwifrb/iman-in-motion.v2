@@ -10,7 +10,6 @@ import Articles from './pages/Articles';
 import ArticleDetail from './pages/ArticleDetail';
 import Aiman from './pages/Aiman';
 import Info from './pages/Info';
-import { movies as splashMovies } from './data/movies';
 
 
 const firebaseConfig = {
@@ -398,7 +397,6 @@ function Navbar({ path, theme, setTheme }) {
 function SplashScreen({ onDone }) {
   const [leaving, setLeaving] = useState(false);
   const finishRef = React.useRef(false);
-  const splashPosters = useMemo(() => splashMovies.filter((movie) => movie.poster_url).slice(0, 30), []);
 
   function finish() {
     if (finishRef.current) return;
@@ -411,15 +409,11 @@ function SplashScreen({ onDone }) {
   }
 
   useEffect(() => {
-    const timer = window.setTimeout(() => finish(), 4600);
     const keyHandler = (event) => {
       if (event.key === 'Enter' || event.key === ' ' || event.key === 'Escape') finish();
     };
     window.addEventListener('keydown', keyHandler);
-    return () => {
-      window.clearTimeout(timer);
-      window.removeEventListener('keydown', keyHandler);
-    };
+    return () => window.removeEventListener('keydown', keyHandler);
   }, []);
 
   return (
@@ -429,17 +423,6 @@ function SplashScreen({ onDone }) {
       onClick={finish}
       aria-label="Klik di mana saja untuk melanjutkan ke IMAN IN MOTION"
     >
-      <span className="splash-3d-stage" aria-hidden="true">
-        {[0, 1, 2].map((row) => (
-          <span key={row} className={`splash-poster-row row-${row + 1}`}>
-            {[...splashPosters, ...splashPosters.slice(0, 12)].map((movie, index) => (
-              <span className="splash-poster-tile" key={`${row}-${movie.title_asli}-${index}`}>
-                <img src={movie.poster_url} alt="" loading="eager" />
-              </span>
-            ))}
-          </span>
-        ))}
-      </span>
       <span className="splash-orb splash-orb-one" />
       <span className="splash-orb splash-orb-two" />
       <span className="splash-orb splash-orb-three" />

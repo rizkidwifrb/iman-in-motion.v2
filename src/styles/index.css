@@ -2482,3 +2482,78 @@ img[alt="Logo"], img[alt="IMAN IN MOTION"] {
   .splash-poster-tile { border-radius: .65rem; }
   .splash-center { backdrop-filter: blur(12px); }
 }
+
+/* v31 splash minimal premium: no auto skip, no poster marquee, no card box */
+.splash-3d-stage,
+.splash-poster-row,
+.splash-poster-tile {
+  display: none !important;
+}
+
+.splash-screen {
+  cursor: pointer;
+  background:
+    radial-gradient(circle at 48% 38%, rgba(211, 163, 72, 0.18), transparent 24rem),
+    radial-gradient(circle at 20% 18%, rgba(0, 93, 92, 0.24), transparent 22rem),
+    radial-gradient(circle at 88% 74%, rgba(122, 78, 45, 0.26), transparent 24rem),
+    linear-gradient(135deg, #090807 0%, #15110d 46%, #22170f 100%) !important;
+}
+
+.splash-screen::before {
+  opacity: .42 !important;
+  background:
+    linear-gradient(115deg, transparent 0 42%, rgba(211,163,72,.16) 48%, transparent 55%),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.025) 0 1px, transparent 1px 44px) !important;
+  transform: rotate(-7deg) scale(1.08) !important;
+}
+
+.splash-center {
+  width: auto !important;
+  max-width: min(90vw, 620px) !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+.splash-logo-wrap {
+  border: 1px solid rgba(211, 163, 72, .28) !important;
+  background: rgba(246, 238, 220, .92) !important;
+  box-shadow: 0 18px 70px rgba(211, 163, 72, .26), 0 6px 24px rgba(0,0,0,.32) !important;
+}
+
+.splash-title {
+  text-shadow: 0 16px 50px rgba(211, 163, 72, .22);
+}
+
+@media (max-width: 640px) {
+  .splash-center {
+    max-width: min(86vw, 330px) !important;
+    gap: .62rem !important;
+  }
+
+  .splash-logo-wrap {
+    width: 76px !important;
+    height: 76px !important;
+    border-radius: 24px !important;
+  }
+
+  .splash-title {
+    font-size: 1.45rem !important;
+    line-height: 1.08 !important;
+    letter-spacing: .16em !important;
+  }
+
+  .splash-subtitle {
+    max-width: 16rem !important;
+    font-size: .68rem !important;
+  }
+
+  .splash-continue {
+    background: rgba(255,255,255,.055) !important;
+    border-color: rgba(211, 163, 72, .24) !important;
+    font-size: .55rem !important;
+  }
+}
