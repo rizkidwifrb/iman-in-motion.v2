@@ -1,0 +1,10 @@
+node_modules
+dist
+.env
+*.zip
+.git
+.gitignore
+README*.md
+npm-debug.log
+.cache
+.vite
