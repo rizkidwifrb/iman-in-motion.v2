@@ -2,8 +2,14 @@ FROM node:20-bookworm-slim
 
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm install --include=dev --no-audit --no-fund --legacy-peer-deps
+ENV NODE_ENV=development
+ENV NPM_CONFIG_AUDIT=false
+ENV NPM_CONFIG_FUND=false
+ENV NPM_CONFIG_PROGRESS=false
+
+COPY package.json package-lock.json* ./
+
+RUN npm install --include=dev --no-audit --no-fund --legacy-peer-deps --verbose
 
 COPY . .
 
